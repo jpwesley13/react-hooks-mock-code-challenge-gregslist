@@ -1,21 +1,36 @@
-import React from "react";
+import React, {useState} from "react";
 
-function ListingCard() {
+function ListingCard( {listing, onDeleteListing} ) {
+
+  const [fave, setFave] = useState(false)
+
+  function handleFave() {
+    return setFave(!fave)
+  }
+
+  function handleDeleteClick() {
+    fetch(`http://localhost:6001/listings/${listing.id}`, {
+      method: "DELETE",
+    })
+    .then(res => res.json())
+    .then(() => onDeleteListing(listing))
+  }
+
   return (
     <li className="card">
       <div className="image">
         <span className="price">$0</span>
-        <img src={"https://via.placeholder.com/300x300"} alt={"description"} />
+        <img src={listing.image} alt={listing.description} />
       </div>
       <div className="details">
-        {true ? (
-          <button className="emoji-button favorite active">★</button>
+        {fave ? (
+          <button onClick={() => setFave(!fave)} className="emoji-button favorite active">★</button> //two functions for accomplishing the same result. Unsure which is "better."
         ) : (
-          <button className="emoji-button favorite">☆</button>
+          <button onClick={handleFave} className="emoji-button favorite">☆</button>
         )}
-        <strong>{"description"}</strong>
-        <span> · {"location"}</span>
-        <button className="emoji-button delete">🗑</button>
+        <strong>{listing.description}</strong>
+        <span> · {listing.location}</span>
+        <button onClick={handleDeleteClick} className="emoji-button delete">🗑</button>
       </div>
     </li>
   );

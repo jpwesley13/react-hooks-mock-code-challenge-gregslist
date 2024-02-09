@@ -1,9 +1,12 @@
-import React from "react";
+import React, {useState} from "react";
 
-function Search() {
+function Search({onSearch}) {
+
+  const [text, setText] = useState("");
+
   function handleSubmit(e) {
     e.preventDefault();
-    console.log("submitted");
+    onSearch(text); //by doing this I am inherently setting the "setSearch" value to the searched text, which is why I don't do the e.target.value on the top level to set it. I think, anyways.
   }
 
   return (
@@ -12,10 +15,10 @@ function Search() {
         type="text"
         id="search"
         placeholder="search free stuff"
-        value={""}
-        onChange={(e) => console.log(e.target.value)}
+        value={text}
+        onChange={(e) => setText(e.target.value)}
       />
-      <button type="submit">🔍</button>
+      <button onSubmit={handleSubmit} type="submit">🔍</button>
     </form>
   );
 }
